@@ -1,0 +1,466 @@
+/* 전체 요소의 기본 여백과 박스 크기 계산 방식을 정리합니다 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 앱 전체 배경과 기본 글꼴을 설정합니다 */
+body {
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #f6f4fb;
+  color: #222;
+}
+
+/* 화면 중앙에 Todo 앱 카드가 오도록 배치합니다 */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px 16px;
+}
+
+/* Todo 앱의 메인 카드 영역입니다 */
+.todo-card {
+  width: 100%;
+  max-width: 680px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(103, 43, 224, 0.14);
+}
+
+/* 상단 제목 영역입니다 */
+.app-header {
+  margin-bottom: 24px;
+}
+
+.app-label {
+  display: inline-block;
+  margin-bottom: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(103, 43, 224, 0.1);
+  color: #672be0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.app-header h1 {
+  margin-bottom: 8px;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #171717;
+}
+
+.app-description {
+  font-size: 15px;
+  color: #666;
+}
+
+/* 주간 뷰 전체 영역입니다 */
+.week-section {
+  margin-bottom: 24px;
+  padding: 14px;
+  border: 1px solid #ebe7f5;
+  border-radius: 18px;
+  background: #fbfaff;
+}
+
+/* 이전 주 / 다음 주 버튼과 선택 날짜 표시 영역입니다 */
+.week-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+/* 이전 주 / 다음 주 버튼입니다 */
+.week-move-button {
+  height: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 12px;
+  background: #eee9fb;
+  color: #672be0;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.week-move-button:hover {
+  background: #e1d8fa;
+}
+
+.week-move-button:active {
+  transform: scale(0.96);
+}
+
+/* 현재 선택된 날짜를 보여주는 박스입니다 */
+.selected-date-box {
+  flex: 1;
+  text-align: center;
+}
+
+.date-label {
+  margin-bottom: 4px;
+  font-size: 12px;
+  color: #888;
+}
+
+.selected-date-text {
+  font-size: 17px;
+  font-weight: 800;
+  color: #171717;
+}
+
+/* 월요일부터 일요일까지 날짜를 가로로 배치하는 영역입니다 */
+.week-date-list {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+/* 주간 날짜 버튼 기본 스타일입니다 */
+.week-date-button {
+  min-height: 76px;
+  padding: 10px 6px;
+  border: 1px solid #ebe7f5;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #333;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.week-date-button:hover {
+  border-color: #672be0;
+  background: #f8f5ff;
+}
+
+.week-date-button:active {
+  transform: scale(0.97);
+}
+
+/* 현재 선택된 날짜 버튼입니다 */
+.week-date-button.selected {
+  border-color: #672be0;
+  background: #672be0;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(103, 43, 224, 0.22);
+}
+
+/* 오늘 날짜 버튼입니다 */
+.week-date-button.today {
+  border-color: #672be0;
+}
+
+/* 오늘이면서 선택된 날짜일 때 스타일 충돌을 자연스럽게 정리합니다 */
+.week-date-button.today.selected {
+  border-color: #672be0;
+  background: #672be0;
+  color: #ffffff;
+}
+
+/* 요일 텍스트입니다 */
+.week-day-name {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: inherit;
+  opacity: 0.8;
+}
+
+/* 날짜 숫자 텍스트입니다 */
+.week-day-number {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 19px;
+  font-weight: 800;
+  color: inherit;
+}
+
+/* 각 날짜의 Todo 개수 텍스트입니다 */
+.week-todo-count {
+  display: inline-block;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: rgba(103, 43, 224, 0.1);
+  color: #672be0;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* 선택된 날짜 안의 Todo 개수 배지입니다 */
+.week-date-button.selected .week-todo-count {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+/* 입력창과 추가 버튼 영역입니다 */
+.todo-input-section {
+  margin-bottom: 20px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+/* Todo 입력창입니다 */
+.todo-input {
+  flex: 1;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #ddd8eb;
+  border-radius: 14px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.todo-input:focus {
+  border-color: #672be0;
+  box-shadow: 0 0 0 4px rgba(103, 43, 224, 0.12);
+}
+
+/* Todo 추가 버튼입니다 */
+.add-button {
+  height: 48px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 14px;
+  background: #672be0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.add-button:hover {
+  background: #5622bd;
+}
+
+.add-button:active {
+  transform: scale(0.97);
+}
+
+/* 안내 메시지 영역입니다 */
+.message-text {
+  min-height: 20px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #d93025;
+}
+
+/* 전체 / 진행 중 / 완료 필터 탭 영역입니다 */
+.filter-section {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 6px;
+  border-radius: 16px;
+  background: #f4f0fd;
+}
+
+/* 필터 탭 버튼의 기본 스타일입니다 */
+.filter-button {
+  flex: 1;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #6f6a7c;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.filter-button:hover {
+  color: #672be0;
+}
+
+/* 현재 선택된 필터 탭을 시각적으로 구분합니다 */
+.filter-button.active {
+  background: #672be0;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(103, 43, 224, 0.22);
+}
+
+/* Todo 목록 기본 스타일입니다 */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Todo 항목 하나의 카드입니다 */
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid #ebe7f5;
+  border-radius: 16px;
+  background: #fbfaff;
+}
+
+/* Todo 텍스트입니다 */
+.todo-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+/* 완료된 Todo 텍스트에 취소선을 표시합니다 */
+.todo-text.completed {
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* 버튼들을 감싸는 영역입니다 */
+.todo-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* 수정 / 완료 / 삭제 버튼의 공통 스타일입니다 */
+.action-button {
+  padding: 7px 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.action-button:active {
+  transform: scale(0.96);
+}
+
+.edit-button {
+  background: #eee9fb;
+  color: #672be0;
+}
+
+.edit-button:hover {
+  background: #e1d8fa;
+}
+
+.complete-button {
+  background: #edf7ef;
+  color: #248a3d;
+}
+
+.complete-button:hover {
+  background: #dff1e4;
+}
+
+.delete-button {
+  background: #fdecec;
+  color: #d93025;
+}
+
+.delete-button:hover {
+  background: #fadada;
+}
+
+/* Todo가 없을 때 보여줄 빈 상태 화면입니다 */
+.empty-state {
+  padding: 36px 20px;
+  border: 1px dashed #d8ceef;
+  border-radius: 18px;
+  background: #fbfaff;
+  text-align: center;
+}
+
+.empty-state-title {
+  margin-bottom: 8px;
+  color: #672be0;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.empty-state-description {
+  color: #777;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 모바일 화면에서 입력 영역과 버튼 배치를 자연스럽게 조정합니다 */
+@media (max-width: 640px) {
+  .todo-card {
+    padding: 24px;
+  }
+
+  .week-header {
+    gap: 8px;
+  }
+
+  .week-move-button {
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .selected-date-text {
+    font-size: 15px;
+  }
+
+  .week-date-list {
+    gap: 6px;
+  }
+
+  .week-date-button {
+    min-height: 68px;
+    padding: 8px 4px;
+  }
+
+  .week-day-name {
+    font-size: 11px;
+  }
+
+  .week-day-number {
+    font-size: 16px;
+  }
+
+  .week-todo-count {
+    padding: 3px 5px;
+    font-size: 10px;
+  }
+
+  .input-group {
+    flex-direction: column;
+  }
+
+  .add-button {
+    width: 100%;
+  }
+
+  .filter-section {
+    flex-direction: column;
+  }
+
+  .todo-item {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .todo-actions {
+    width: 100%;
+  }
+
+  .action-button {
+    flex: 1;
+  }
+}

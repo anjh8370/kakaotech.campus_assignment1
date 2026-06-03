@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vanilla JS Todo App</title>
+
+  <!-- CSS 파일 연결 -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <main class="app-container">
+    <section class="todo-card">
+      <header class="app-header">
+        <p class="app-label">Productivity</p>
+        <h1>Todo List</h1>
+        <p class="app-description">
+          주간 일정과 날짜별 할 일을 정리해보세요.
+        </p>
+      </header>
+
+      <!-- 주간 뷰 영역 -->
+      <section class="week-section" aria-label="주간 날짜 선택">
+        <div class="week-header">
+          <button type="button" id="previousWeekButton" class="week-move-button">
+            이전 주
+          </button>
+
+          <div class="selected-date-box">
+            <p class="date-label">선택된 날짜</p>
+            <p id="selectedDateText" class="selected-date-text"></p>
+          </div>
+
+          <button type="button" id="nextWeekButton" class="week-move-button">
+            다음 주
+          </button>
+        </div>
+
+        <!-- JavaScript로 이번 주 월요일부터 일요일까지 날짜 버튼이 생성됩니다 -->
+        <div id="weekDateList" class="week-date-list"></div>
+      </section>
+
+      <section class="todo-input-section">
+        <div class="input-group">
+          <input
+            type="text"
+            id="todoInput"
+            class="todo-input"
+            placeholder="할 일을 입력하세요"
+            autocomplete="off"
+          />
+          <button type="button" id="addTodoButton" class="add-button">
+            추가
+          </button>
+        </div>
+
+        <!-- 입력값이 비어 있을 때 안내 메시지를 보여주는 영역 -->
+        <p id="messageText" class="message-text"></p>
+      </section>
+
+      <!-- Todo 상태별 필터 탭 영역 -->
+      <section class="filter-section" aria-label="Todo 상태 필터">
+        <button
+          type="button"
+          class="filter-button active"
+          data-filter-type="all"
+        >
+          전체
+        </button>
+        <button
+          type="button"
+          class="filter-button"
+          data-filter-type="active"
+        >
+          진행 중
+        </button>
+        <button
+          type="button"
+          class="filter-button"
+          data-filter-type="completed"
+        >
+          완료
+        </button>
+      </section>
+
+      <section class="todo-list-section">
+        <ul id="todoList" class="todo-list">
+          <!-- JavaScript로 Todo 항목 또는 빈 상태 화면이 추가됩니다 -->
+        </ul>
+      </section>
+    </section>
+  </main>
+
+  <!-- JS 파일 연결 -->
+  <script src="./app.js"></script>
+</body>
+</html>
